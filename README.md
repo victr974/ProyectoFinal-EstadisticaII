@@ -7,8 +7,8 @@
 ## - documento word 
 ## - Los data sets analizados exploratoriamente que fueron tomados de kaggle
 # Enlace de data sets:
-## Conjunto de datos de ventas de videojuegos  https://www.kaggle.com/sidtwr/videogames-sales-dataset?select=XboxOne_GameSales.csv
-## Consumo de alcohol en los estudiantes  https://www.kaggle.com/uciml/student-alcohol-consumption?select=student-por.csv
+## - Conjunto de datos de ventas de videojuegos  https://www.kaggle.com/sidtwr/videogames-sales-dataset?select=XboxOne_GameSales.csv
+## - Consumo de alcohol en los estudiantes  https://www.kaggle.com/uciml/student-alcohol-consumption?select=student-por.csv
 
 
 
