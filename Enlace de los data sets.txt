@@ -1,0 +1,8 @@
+Data set tomados en kaggle
+
+
+1. Video_Games_Sales_as_at_22_Dec_2016 
+---- https://www.kaggle.com/sidtwr/videogames-sales-dataset?select=XboxOne_GameSales.csv
+
+2. student-por
+----- https://www.kaggle.com/uciml/student-alcohol-consumption?select=student-por.csv

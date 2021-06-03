@@ -1,0 +1,557 @@
+---
+title: "Consumo de alcohol en los estudiantes"
+author: "Gerson Omar Pérez & Victor Cortez Sis"
+date: "27/5/2021"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Enlace del set de datos
+https://www.kaggle.com/uciml/student-alcohol-consumption?select=student-por.csv
+
+
+## Instalacion de paquetes y librerias
+install.packages("dplyr")
+install.packages("ggplot2")
+install.packages("corrplot")
+require(stats)
+library(dplyr)
+library(ggplot)
+library(ggplot2)
+library(corrplot)
+
+
+## Cargar el data set
+```{r}
+alcohol <- read.csv("student-por.csv")
+```
+
+## 1
+## ¿La relacion que tiene con su familia tiene relacion con en tiemmpo que el estudiante pasa fuera de casa?
+## Ho: El tiempo que pasa fuera de casa SI es causado por la relacion familiar del estudiante
+## H1: El tiempo que pasa fuera de casa NO es causado por la relacion familiar del estudiante
+
+```{r}
+cor(alcohol$famrel, alcohol$goout)
+plot(alcohol$goout, alcohol$famrel, col="lightblue")
+abline(lm(alcohol$famrel ~ alcohol$goout), col = "yellow", lwd = 2)
+
+#Correlacion: 0.08970657
+```
+
+## Los datos poseen una correlacion negativa, por lo tanto deducimos que el tiempo que el estudiante pasa fuera de casa no esta conectado con la relacion que el estudiante tiene en su nucleo familiar.
+
+
+
+
+
+
+## 2
+## ¿El genero del estudiante es un determinante para que este tenga una enseñanza de alta calidad?
+## Ho: Es probable que el genero NO garantice una enseñanza de alta calidad
+## H1: Es probable que el genero SI garantice una enseñanza de alta calidad
+
+```{r}
+tablaa<-table(alcohol$sex, alcohol$schoolsup, dnn = c("Genero","Buena Educacion"))
+tablaa
+```
+```{r}
+mosaicplot(tablaa, main = deparse("Educacion y Genero)"), col=c("blue","red","yellow"))
+```
+```{r}
+chisq.test(tablaa)
+0.006879
+```
+
+## Se rechaza la hipotesis nula debido a que nuestro valor de chi cuadrado es 0.006879, con lo cual podemos decir que es probable que se pueda obtener una educacion de alta calidad segun el genero del joven estudiante
+
+
+
+
+
+
+
+
+## 3
+## ¿La relación que tiene dentro de su hogar influye en los fracasos que ha tenido en su formación académica?
+## Ho: La relacion familiar  si es la posible causante de sus fracasos estudiantiles
+## H1: La relacion familiar  no es la posible causante de sus fracasos estudiantiles
+
+```{r}
+cor(alcohol$famrel, alcohol$failures)
+plot(alcohol$failures, alcohol$famrel, col="lightblue")
+abline(lm(alcohol$famrel ~ alcohol$failures), col = "yellow", lwd = 2)
+
+#Correlacion: -0.06264516
+```
+
+## Los datos obtenidos nos dan una correlacion negativa, debido a esto podemos decir que la relacion familiar no es la causante de sus fracasos como estudiante
+
+
+
+
+
+
+## 4
+## ¿EL hecho de tener una familia de alta calidad es algo que le otorga estudios de alta calidad al estudiante?
+## Ho: Tener una buena familia NO es un factor para tener educacion de alta calidad
+## H1: Tener una buena familia SI es un factor para tener educacion de alta calidad
+```{r}
+tablae <- table(alcohol$schoolsup, alcohol$famsup, dnn=c("Nivel alto Familia","Nivel alto Educacion" ))
+tablae
+```
+```{r}
+mosaicplot(tablae, main=deparse("Familia y Educacion"), col=c("yellow","red","blue"))
+```
+```{r}
+chisq.test(tablae)
+
+0.07356<0.05
+```
+
+
+## No se rechaza la hipotesis nula debido a que nuestro valor de chi cuadrado es de 0.07356, por lo tanto podemos definir que el hecho de tener una familia de alta calidad es algo que puede llegar a garantizar que un estudiante tenga acceso a una educacion de alto nivel
+
+
+
+
+
+
+## 5
+## La distancia del casa al colegio (direccion) tiene algo que ver con las ausencias que ha tenido el estudiante en su respectiva escuela?
+## Ho: La distancia de casa-colegio SI influye en las ausencias que ha tenido
+## H1: La distancia de casa-colgeio NO influye en las ausencias que ha tenido
+```{r}
+tablacontinengcia<- table(alcohol$adress, alcohol$absences)
+boxplot(absences ~ adress, data=alcohol, col=c("red", "blue"))
+chisq.test(tablacontinengcia)
+
+0.1249<0.05
+```
+
+## No se rechaza la hipotesis nula debido a que nuestro valor de chi cuadrado es 0.1249, por lo tanto se determina de manera oficial que la distancia que hay entre la casa y el colegio, si es un factor que provoca que los estudiantes sean ausentes en sus clases
+
+
+
+
+
+
+## 6
+## El estado personal del estudiante se ve afectado por la persona que esta a cargo de la custodia del joven?
+## Ho: La persona encargada NO afecta el estado personal
+## H1: La persona encargada SI afecta el estado personal
+```{r}
+tablai <- table(alcohol$guardian, alcohol$Pstatus, dnn=c("Encargado","Estado Personal" ))
+tablai
+```
+```{r}
+mosaicplot(tablai, main=deparse("Encargado & Estado Personal"), col=c("blue","red","yellow"))
+```
+```{r}
+chisq.test(tablai)
+
+7.664e-05<0.05
+```
+
+## Se rechaza la hipotesis nula debido a que nuestro chi cuadrado es 7.664e, por esta razon se dice que la persona que este a cargo del joven estudiante si puede lelgar a tener influecia en el estado personal del joven
+
+
+
+
+
+
+## 7
+## ¿Cual es la media del nivel de educacion que tiene un hombre?
+## Ho: La media del nivel de educacion para un hombre es mu=4
+## H1: La media del nivel de educacion para un hombre es mu=/=4
+```{r}
+hist(alcohol$Medu, col="red")
+mediaMedu <- mean(alcohol$Medu)
+abline(v=mediaMedu, col="green")
+medianaMedu <- median(alcohol$Medu)
+abline (v=medianaMedu, col="blue")
+
+boxplot(alcohol$Medu, col="green")
+
+t.test(alcohol$Medu, mu=4, alternative="two.sided")
+
+#Media: 2.51
+
+2.2e-16<0.05
+```
+
+## Se rechaza la hipotesis nula, lo cual nos indica que la media del nivel de educacion de un hombre es diferente a 4
+
+
+
+
+
+
+## 8
+## ¿Cual es la media del nivel de educacion que tiene una mujer?
+## Ho: La media del nivel de educacion para una mujer es mu=4
+## H1: La media del nivel de educacion para una mujer es mu=/=4
+```{r}
+hist(alcohol$Fedu, col="red")
+mediaFedu <- mean(alcohol$Fedu)
+abline(v=mediaFedu, col="green")
+medianaFedu <- median(alcohol$Fedu)
+abline (v=medianaFedu, col="blue")
+
+boxplot(alcohol$Fedu, col="green")
+
+t.test(alcohol$Fedu, mu=4, alternative="two.sided")
+
+#Media: 2.30
+
+2.2e-16<0.05
+```
+
+## Se rechaza la hipotesis nula, lo cual nos indica que la media del nivel de educacion de una mujer es diferente a 4
+
+
+
+
+
+
+## 9
+## Nivel de usencia en el colegio de los estudiantes
+## Ho: Si hay normalidad en los datos
+## H1: NO hay normalidad en los datos
+```{r}
+plot(density(alcohol$absences), col="red", lwd=2)
+shapiro.test(alcohol$absences)
+2.2e-16<0.05
+```
+
+## Se rechaza la hipotesis nula, por lo tanto esto nos indica que los datos analizados en esta ocasion no tienen normalidad
+## Tambien se nos muestra que los datos estan sesgados a la derecha
+
+
+
+
+
+
+## 10
+## ¿Existe diferencia en la calidad de enseñanza que puede tener un hombre y una mujer?
+## Ho: No hay tal diferencia en la calidad de enseñanza con relacion al genero
+## H1: Si hay tal diferencia en la calidad de enseñanza con relacion al genero
+```{r}
+tablao <- table(alcohol$schoolsup, alcohol$sex, dnn=c("Buen Nivel Estudios","Genero" ))
+tablao
+```
+```{r}
+mosaicplot(tablao, main=deparse("Formacion & Genero"), col=c("blue","red","yellow"))
+```
+```{r}
+chisq.test(tablao)
+
+0.006879<0.05
+```
+
+## Se rechaza la hipotesis nula ya que el pvalue es menor al nivel de significancia, esto nos da a entender que el el genero es una variable determinante que le garantiza al estudiante una buena formacion academica
+
+
+
+
+
+
+## 11
+## ¿Que correlacion tiene el nivel de estudios de un hombre con respecto a los fracasos que ha tenido en su vida estudiantil?
+## Ho: El nivel de estudios si esta correlacionado con los fracasos
+## H1: El nivel de estudios no esta correlacionado con los fracasos
+```{r}
+cor(alcohol$Medu, alcohol$failures)
+plot(alcohol$failures, alcohol$Medu, col="lightblue")
+abline(lm(alcohol$Medu ~ alcohol$failures), col = "yellow", lwd = 2)
+
+#Correlacion entre las dos variables: -0.1722103
+```
+
+## La correlacion es negativa, por lo tanto se llega a la conclusion de que el nivel de estudios que tienen los hombres no esta relacionado respecto a los fracasos que tiene en el colegio o escuela.
+
+
+
+
+
+## 12
+## ¿Que correlacion tiene el nivel de estudios de una mujer con respecto a los fracasos que ha tenido?
+## Ho: El nivel de estudios si esta correlacionado con los fracasos
+## H1: El nivel de estudios no esta correlacionado con los fracasos
+```{r}
+cor(alcohol$Fedu, alcohol$failures)
+plot(alcohol$failures, alcohol$Fedu, col="lightblue")
+abline(lm(alcohol$Fedu ~ alcohol$failures), col = "yellow", lwd = 2)
+
+#Correlacion entre las dos variables: -0.165915
+```
+
+## La correlacion es negativa, por lo tanto se llega a la conclusion de que el nivel de estudios que tienen las mujeres no esta relacionado respecto a los fracasos que han tenido
+
+
+
+
+
+
+## 13
+## La relacion que el estudiente tiene dentro de su familia afecta el lado amoroso/empatico que posee en su vida estudiantil?
+## Ho: No existe diferencia en la relacion familiar con respecto al nivel de cariño que posee
+## H1: Si existe diferencia en la relacion familiar con respecto al nivel de cariño que posee
+```{r}
+boxplot(alcohol$famrel~alcohol$romantic)
+t.test(alcohol$famrel~alcohol$romantic)
+
+0.2653<0.05
+```
+
+## Se rechaza la hipotesis nula debido a que el valor de t.test es 0.2653, entonces con esto se puede decir que la relacion familiar es algo que si afecta el nivel de cariño/amor que el estudiante muestre dentro de su entorno estudiantil
+
+
+
+
+
+
+## 14
+## ¿Una educacion de alta calidad garantiza que esl estudiante pueda sacar el diversificado(preparatoria)?
+## Ho: Una buena formacion academica no garantiza que el estudiante pueda estudiar el diversificado
+## H1: Una buena formacion academica si garantiza que el estudiante pueda estudiar el diversificado
+```{r}
+tablau <- table(alcohol$schoolsup, alcohol$higher, dnn=c("Buen Nivel Estudios","Diversificado" ))
+tablau
+```
+```{r}
+mosaicplot(tablau, main=deparse("Formacion & Diversificado"), col=c("blue","red","yellow"))
+```
+```{r}
+chisq.test(tablau)
+
+0.04923<0.05
+```
+
+## Se rechaza la hipotesis nula ya que el chi cuadrado es 0.04923, por lo tanto determinamos que un alto nivel de estudios si puede llegar a garantizar que el estudiante curse el diversificado
+
+
+
+
+
+
+
+
+## 15
+## ¿El motivo del alcoholismo del joven estudiante puede estar siendo causado por la relacion familiar que se vive en su hogar?
+## Ho: La relacion familiar podria ser la causante del alcoholismo del estudiante
+## H1: La relacion familiar podria no ser la causante del alcoholismo dle estudiante
+```{r}
+tablacontinengcia<- table(alcohol$reason, alcohol$famrel)
+boxplot(famrel ~ reason, data=alcohol, col=c("red", "blue"))
+chisq.test(tablacontinengcia)
+
+0.6318<0.05
+```
+
+## No se rechaza la hipotesis nula devico a que el chi cuadrado es 0.6318, por lo tanto se puede decir que el motivo de alcoholismo del estudiante si puede estar siendo ocasionado por la relaion que tiene dentro de su hogar
+
+
+
+
+
+
+## Resumen estadistico de cada una de las variables
+```{r}
+summary(alcohol)
+```
+
+
+
+## Estructura de las variables
+
+```{r}
+str(alcohol)
+```
+
+
+
+## Las primeras filas de los datos
+```{r}
+head(alcohol)
+```
+
+## Obtener un resumen estadistico de cada variable
+```{r}
+summary(alcohol)
+```
+
+
+## Analisis individual de cada una de las variables que conforman el set de datos
+```{r}
+summary(alcohol$school)
+```
+
+```{r}
+summary(alcohol$sex)
+```
+
+```{r}
+summary(alcohol$age)
+```
+
+```{r}
+summary(alcohol$adress)
+```
+
+```{r}
+summary(alcohol$famsize)
+```
+
+```{r}
+summary(alcohol$Pstatus)
+```
+
+```{r}
+summary(alcohol$Medu)
+```
+
+```{r}
+summary(alcohol$Fedu)
+```
+
+```{r}
+summary(alcohol$Mjob)
+```
+
+```{r}
+summary(alcohol$Fjob)
+```
+
+```{r}
+summary(alcohol$reason)
+```
+
+```{r}
+summary(alcohol$guardian)
+```
+
+```{r}
+summary(alcohol$traveltime)
+```
+
+```{r}
+summary(alcohol$studytime)
+```
+
+```{r}
+summary(alcohol$failures)
+```
+
+```{r}
+summary(alcohol$schoolsup)
+```
+
+```{r}
+summary(alcohol$famsup)
+```
+
+```{r}
+summary(alcohol$paid)
+```
+
+```{r}
+summary(alcohol$activities)
+```
+
+```{r}
+summary(alcohol$nursery)
+```
+
+```{r}
+summary(alcohol$higher)
+```
+
+```{r}
+summary(alcohol$internet)
+```
+
+```{r}
+summary(alcohol$romantic)
+```
+
+```{r}
+summary(alcohol$famrel)
+```
+
+```{r}
+summary(alcohol$freetime)
+```
+
+```{r}
+summary(alcohol$goout)
+```
+
+```{r}
+summary(alcohol$Dalc)
+```
+
+```{r}
+summary(alcohol$Walc)
+```
+
+```{r}
+summary(alcohol$health)
+```
+
+```{r}
+summary(alcohol$absences)
+```
+
+```{r}
+summary(alcohol$G1)
+```
+
+```{r}
+summary(alcohol$G2)
+```
+
+```{r}
+summary(alcohol$G3)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

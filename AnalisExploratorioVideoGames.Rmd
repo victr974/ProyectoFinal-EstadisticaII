@@ -1,0 +1,272 @@
+---
+title: "AnalisExploratorioVideoGames"
+author: "Victor René Cortez Sis & Gerson Omar Pérez"
+date: "24/5/2021"
+output:
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Enlace del Data set: https://www.kaggle.com/sidtwr/videogames-sales-dataset?select=XboxOne_GameSales.csv
+
+## Librerias
+```{r} 
+require(stats)
+library(dplyr)
+library(ggplot2)
+library(readr)
+library(nortest) # prueba de normalidad de Anderson-Darling, que funciona para tamaños de muestra más grandes
+```
+
+
+## Cargar y leer el archivo
+```{r}
+VideoGames<-read.csv("Video_Games_Sales_as_at_22_Dec_2016.csv")
+```
+## Explorar la estructura y las variables
+```{r}
+str(VideoGames)
+```
+## Ver las primeras filas de los datos
+```{r}
+head(VideoGames)
+```
+## Obtener un resumen estadistico de cada variables
+```{r}
+summary(VideoGames)
+```
+
+## Pregunta 1: 
+## ¿Sera que las ventas en Norteámerica van a depender al tipo de genero de video juegos. Es decir que tipo de genero de video juegos venden mas en Norteámerica?
+## NA_Sales= Cuantitativa  
+## genre= Cualitativa
+## Graficamente = Boxplot
+## Modelo: Anova
+```{r}
+ggplot(data=VideoGames, aes(x=Genre, y=NA_Sales, color=Genre))+geom_boxplot()+theme_bw()
+```
+
+## Como se observa en la grafica vemos el comportamiento de las tipos de generos en funciones a la ventas globales lo cual algunos generos tiene una distribucion diferente de cada por que prodia ser el genero de videosjuegos mas vendiso es en plataforma y esta el otro genero tambien que es sports.
+## Hipotesis
+## No hay diferencia entre las medias del los grupos
+## Al menor un par de medias son significativas distintas la una de la otra
+```{r}
+anova<-aov(VideoGames$NA_Sales~VideoGames$Genre)
+```
+```{r}
+summary(anova)
+```
+## Pr(>F)=2e-16 ***
+## Respuesta: Dado que el p-value (2e-16 < 0.05) es mayor al nivel de significancia, no hay suficiente evidenica para afirmar que al menos dos medias son distintas entre genero de videojuegos. 
+
+
+## Pregunta 2: 
+## ¿Sera que las ventas en Europa van a depender al tipo de genero de video juegos. Es decir que tipo de genero de video juegos venden mas en Europa?
+## EU_Sales= Cuantitativa  
+## genre= Cualitativa
+## Graficamente = Boxplot
+## Modelo: Anova
+```{r}
+ggplot(data=VideoGames, aes(x=Genre, y=EU_Sales, color=Genre))+geom_boxplot()+theme_bw()
+```
+
+## Como se observa en la grafica vemos los comportamientos de los generos de los videojuegos. Que los generos varian tambien al precio de ventas en europa.
+## Hipotesis
+## No hay diferencia entre las medias del los grupos
+## Al menor un par de medias son significativas distintas la una de la otra
+```{r}
+anova<-aov(VideoGames$EU_Sales~VideoGames$Genre)
+```
+```{r}
+summary(anova)
+```
+## Respesta: Como nuestro p-values (2e-16 < 0.05), no se rechza la hipotesis nula y no hay suficiente evidencua para afirmar que la menos un par de medias son distintas entre el genero.
+
+
+## Pregunta 3:
+## ¡Explorar la variable OtrasVentas(Other_Sales) que se refiere a las ventas de video juegos en el resto del mundo (en millones ) para para determinar la normalidad de los datos?
+## Other_Sales = Cuantitativa
+## Graficamente = Histograma
+## MOdelo = Shapiro
+```{r}
+hist(VideoGames$Other_Sales)
+```
+
+## En la grafica se ve claramente que tiene un distribucion sesgada a la izquiereda. 
+## Hipotesis 
+## Ho: Normalidad de los datos
+## H1: No hay normalidad de los datos
+```{r}
+ad.test(VideoGames$Other_Sales)
+```
+```{r}
+2.2e-16<0.05
+```
+
+## Respuesta: Como el p-value es mayo que el nivel de significancia 0.05, no se recha la hipotesis Ho, por ende hay normalidad en los datos. 
+
+## Pregunta 4:
+## Explorar de la variable VentasGlobales(Global_Sales) que se refiere a las ventas de video juegos mundiales totales para determinar la normalidad de los datos.
+## Global_Sales = Cuantitativa
+## Graficamente = Histograma
+## MOdelo = Shapiro
+```{r}
+hist(VideoGames$Global_Sales)
+```
+
+## Vemos el la grafica que no tiene un distibucion normal porque esta sesgada a la izquierda, vemos la frecuncia de frecuencia de las ventas que por lo menos entre 0 a 5 vemos que la venta en europa de videojuegos es bastante alta.
+## Hipotesis 
+## Ho: Normalidad de los datos
+## H1: No hay normalidad de los datos
+```{r}
+ad.test(VideoGames$Global_Sales)
+```
+## Respuesta: dado que el p-value es yor que el nivel de significancia, no se no rechaza la hipoteis Ho, por ende hay normalidad en los datos de las ventas globales.
+
+
+## Pregunta 5:
+## ¿Sera que las ventas en Jápon van a depender al tipo de genero de video juegos. Es decir que tipo de genero de video juegos venden mas en Jápon?
+## JP_Sales= Cuantitativa  
+## Genre= Cualitativa
+## Graficamente = Boxplot
+## Modelo: Anova
+```{r}
+ggplot(data = VideoGames, aes(x = Genre, y=JP_Sales, color=Genre))+ geom_boxplot() + theme_bw()
+```
+
+## Como se observa que los datos de tipos de genero tienen un comportamiento diferente por lo que dependen de las ventas, pero mas sin embargo el tamaño de las cajas nos indica variablidad en los datos entre genero de videojuegos.
+## Hipotesis:
+## No hay diferencia entre las medias del los grupos
+## Al menor un par de medias son significativas distintas la una de la otra
+
+```{r}
+anova<-aov(VideoGames$JP_Sales~VideoGames$Genre)
+```
+```{r}
+anova
+```
+
+```{r}
+summary(anova)
+```
+## Respuesta: Debido a que nuestro p-values es mayor al nivel de significancia, no se rechaz la hipotesis Ho, por lo que no hay suficiente evidencia para un par de las medias son significativas distrintas entre genero.
+
+## Pregunta 6:
+## Realizar un analisis explorario de la variable clasificacion (Rating) en función  a los tipos de genero del juego. Para determinar la clasificaciones del tipo de genero de juegos es decir clasificarlos en categoria para menores de edad el juego,el contenido por lo genera es apto para todas las edades, clasificar los videosjuegos segun su contenido  de violencia fisica o verbal, entre otras clasificaciones.
+## Rating = Cuatitativa
+## Genre = Cuatitativa
+## Graficamente = Mosaico
+## Modelo = chi cuadrado
+```{r}
+tabla<-table(VideoGames$Rating, VideoGames$Genre, dnn = c("Genero", "Clasificacion"))
+```
+```{r}
+tabla
+```
+```{r}
+mosaicplot(tabla, color=4.2, main = deparse("Relacion Genero y Clasificacion"))
+
+```
+
+## Este grafico no representa la clasificacion de los tipos de generos.
+## Ho: Son variables independientes (No hay relacion)
+## H1: No son variables independientes (Si hay relacion)
+```{r}
+chisq.test(tabla)
+```
+# Respuesta: como nuestro p-value es mayor al nivel de signicancia, no se rechaza la hipotesis Ho, por lo que no hay evidencia suficiente para confirmar que exista una relacion entre clasificacion y el genero de juegos.
+
+
+## Pregunta 7:
+## ¿sera que el tipo de plataforma de lanzamineto del juego (Platform) tiene relacion con las ventas en Norteámerica (en millones).Es decir cual es el tipo de plataforma tiene que ver con las ventas en norteamerica?
+## Patform = Cualitativa
+## NA_Sales = Cuantitativa
+## Graficamente = Boxplot 
+## Modelo = Anova
+```{r}
+ggplot(data = VideoGames, aes(x =Platform, y=NA_Sales, color=Platform))+ geom_boxplot() + theme_bw()
+```
+
+## Como vemos la grafica tiene una gran vialibidad de datos que tiene un comportamiento diferentes de tipo de plataforma, donde el tipo  plataforma wii  vemos donde su vialidad de datos mas elevado a los demas es decir es el que tiene mas ventas en norteamerica.
+## Hipotesis
+## No hay diferencia entre las medias del los grupos
+## Al menor un par de medias son significativas distintas la una de la otra
+```{r}
+anova<-aov(VideoGames$NA_Sales~VideoGames$Platform)
+```
+```{r}
+summary(anova)
+```
+## Pr(>F)=2e-16 ***
+## Respuesta: Debido a que el p-value es mayor que al nivel de significancia, no se rechza la hipoteis nula, por lo que no hay suficiente evidencia para cosiderar un par de medias son significativas distintas entre los tipos de plataforma.
+
+## Pregunta 8: 
+## Realizar un analisis exploratorio para saber si existe alguna relacion entre en las ventas de videojuego en resto del mundo (Other_Sales) y las ventas global (Global_Sales).
+## Other_Sales = Cuantitativa 
+## Global_Sales = Cuantitativa
+## Graficamente = Grafico de dispersion (plot)
+## Modelo = Correlacion
+```{r}
+plot( Other_Sales~Global_Sales, data= VideoGames, col ="blue", main = "Correlacion ", xlab = "OtrasVentas", ylab = "VentasGlobales") + abline(lm(Other_Sales~Global_Sales, data=VideoGames, col="red"))
+```
+
+## Hipotesis 
+## A mayor ventas globales mayor es la OtrosVentras en el resto del mundo
+## A mayor ventas globales menor es la OtrosVentras en el resto del mundo
+
+```{r}
+cor(VideoGames$Other_Sales,VideoGames$Global_Sales)
+```
+## Respuesta: Del resultado vemos que existe una correlacion de 0.7492421 entre las dos variables, esto significa no hay evidencia sufiente que nos indique que las variable esta correlacionda, por ende las ventas globales no van a mejorar mejor tal como las otras ventas en el resto del mundo.
+
+## Pregunta 9:
+## Explorar la variable ventas en Norteámerica (NA_Sales ) para ver la normlidad de los datos.
+## NA_Sales = cuantitativa
+## Graficamente = histograma
+## Modelo = shapiro
+```{r}
+hist(VideoGames$NA_Sales)
+```
+
+## Hipotesis
+## Ho: Normalidad de los datos
+## h1: No hay normalidad en los datos
+```{r}
+ ad.test(VideoGames$NA_Sales)
+```
+```{r}
+2.2e-16<0.05
+```
+
+## Respuesta: Como el pvalue es mayo que el nivel de significancia 0.05, no se rechza la hipotesis Ho, hay normalida en los de las ventas en norteamerica.
+
+## Pregunta 10:
+## Explorar la variable ventas en Japon (JP_Sales ) para ver la normlidad de los datos.
+## JP_Sales = cuantitativa
+## Graficamente = histograma
+## Modelo = shapiro
+```{r}
+hist(VideoGames$JP_Sales)
+```
+
+## Hipotesis
+## Ho: Normalidad de los datos
+## h1: No hay normalidad en los datos
+```{r}
+ad.test(VideoGames$JP_Sales)
+```
+```{r}
+2.2e-16<0.05
+``` 
+## Respuesta: Como el p-value es mayo al nivel de significancia, no se rechaza la hipotesis Ho, por lo que hay normalidad de los datos de las ventas en Japon.
+
+
+
+
+
+
+
+
