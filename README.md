@@ -31,4 +31,4 @@
 
 # Herramienta utilizada: RStudio
 
-# Librerias utilizadas: library(dplyr), library(ggplot), library(ggplot2), library(corrplot)
+# Librerias utilizadas: library(dplyr), library(ggplot), library(ggplot2), library(corrplot), library(nortest)
