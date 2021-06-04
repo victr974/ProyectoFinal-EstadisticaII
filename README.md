@@ -26,7 +26,8 @@
 # Conclusiones
 ## Se finaliza el presente analisis dando por hecho que los datos analizados de manera mas profunda y critica, nos ayudan a llegar a puntos de cuestionamientos que estaban en tela de juicio con respecto a los datos analizados y los factores que les pueden llegar a fectar de manera directa. De esta manera se colcluye en que este tipo de analisis es mas que necesario para obtener la respuesta a una pregunta especifica.
 
-# Analisis realizados: Normalidad, Analisi de correlación, Medias, t.test, anova, chicuadrado, shapiro-test, anova,análisis exploratorio, análisis de la distribución,
+# Analisis realizados
+## Analisis de normalidad, Analisis de correlación, Medias, t.test, anova, chicuadrado, shapiro-test, anova,análisis exploratorio, análisis de la distribución,prueba de normalidad de Anderson-Darling
 
 # Herramienta utilizada: RStudio
 
